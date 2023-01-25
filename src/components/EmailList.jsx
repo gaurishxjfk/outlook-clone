@@ -1,24 +1,15 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getEmailsListAsync } from "../features/emailSlice";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import EmailItem from "./EmailItem";
 
-const EmailList = ({ setOpenEmail }) => {
-  const dispatch = useDispatch();
-  const { emailsList } = useSelector((state) => state.emailData);
-
-  useEffect(() => {
-    dispatch(getEmailsListAsync());
-    return () => {
-      true;
-    };
-  }, []);
+const EmailList = () => {
+  const { filteredEmailsList } = useSelector((state) => state.emailData);
 
   return (
-    <div className="">
-      {emailsList.map((i) => (
-        <EmailItem key={i.id} data={i} setOpenEmail={setOpenEmail} />
+    <div className="min-h-200">
+      {filteredEmailsList.map((i) => (
+        <EmailItem key={i.id} data={i} />
       ))}
     </div>
   );
