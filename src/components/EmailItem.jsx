@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { useDispatch } from "react-redux";
-import { setSelectedEmail } from "../features/emailSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setReadEmails, setSelectedEmail } from "../features/emailSlice";
 
 export const getFirstLetter = (str) => str.slice(0, 1).toUpperCase();
 export const camelize = (str) => {
@@ -15,13 +15,30 @@ export const camelize = (str) => {
 };
 
 const EmailItem = ({ data }) => {
-  const { date, from, short_description, subject } = data;
+  const [isFav, setIsFav] = useState(false);
+  const [isRead, setIsRead] = useState(false);
+  const { date, from, id, short_description, subject } = data;
+  const {
+    readFavObj: { favIds, readIds },
+  } = useSelector((state) => state.emailData);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    favIds.includes(id) ? setIsFav(true) : setIsFav(false);
+    readIds.includes(id) ? setIsRead(true) : setIsRead(false);
+  }, [readIds, favIds]);
+
+  const handleEmailClick = () => {
+    dispatch(setSelectedEmail(data));
+    dispatch(setReadEmails(id));
+  };
 
   return (
     <div
-      className="bg-white flex lg:p-4 md:p-2 lg:max-h-[8em] border border-[#CFCFCF] ml-4 mb-2 mt-0 mr-1 rounded-[9px] cursor-pointer"
-      onClick={() => dispatch(setSelectedEmail(data))}
+      className={`${
+        isRead ? "bg-[#E9E9E9]" : "bg-white"
+      } flex lg:p-4 md:p-2 lg:max-h-[8em] border border-[#CFCFCF] ml-4 mb-2 mt-0 mr-1 rounded-[9px] cursor-pointer`}
+      onClick={() => handleEmailClick()}
     >
       <div className="w-12 lg:w-10 md:w-8 flex justify-center hidden md:block">
         <div className="bg-[#FF0060] rounded-full lg:h-11 lg:w-11 md:w-8 md:h-8 flex items-center justify-center">
@@ -50,7 +67,9 @@ const EmailItem = ({ data }) => {
           <p className="line-clamp-1">
             {moment(date).format("DD/MM/yyyy hh:mma")}
           </p>
-          <a className="text-[#FF0060] cursor-pointer">Favorite</a>
+          <a className={`text-[#FF0060] cursor-pointer ${!isFav && "hidden"}`}>
+            Favorite
+          </a>
         </div>
       </div>
     </div>
