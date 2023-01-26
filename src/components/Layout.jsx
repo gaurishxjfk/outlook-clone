@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getEmailsListAsync,
-  setFilteredEmailsList,
-} from "../features/emailSlice";
+import { useParams } from "react-router-dom";
+import { setFilteredEmailsList } from "../features/emailSlice";
 import EmailBody from "./EmailBody";
 import EmailList from "./EmailList";
+import Pagination from "./Pagination";
 
+const recordsPerPage = 4;
 const Layout = () => {
-  const [activeFilter, setActiveFilter] = useState("none");
-  const dispatch = useDispatch();
+  let { id } = useParams();
 
+  const [activeFilter, setActiveFilter] = useState("none");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+
+  const dispatch = useDispatch();
   const {
-    emailData: { selectedEmail, emailsList },
+    emailData: { emailsList, filteredEmailsList },
   } = useSelector((state) => state);
 
-  useEffect(() => {
-    dispatch(getEmailsListAsync());
-  }, []);
+  const nPages = Math.ceil(filteredEmailsList.length / recordsPerPage);
 
   useEffect(() => {
     if (emailsList.length > 0) {
@@ -30,7 +34,7 @@ const Layout = () => {
       key={key}
       className={`bg-white lg:p-4 md:p-2 lg:max-h-[8em] my-1 mx-4 rounded-[5px] border border-[#CFCFCF] ${
         emailsList.length > 0 && "hidden"
-      }`}
+      } ${id && "w-[45%] "}`}
     >
       <div className="animated-background">
         <div className="bg-white absolute top-0 left-25 h-full w-1/20"></div>
@@ -63,13 +67,19 @@ const Layout = () => {
         {[...new Array(3)].map((i, j) => loaderPlaceholder(j))}
       </div>
       <div className={`flex`}>
-        <div
-          className={selectedEmail?.id ? "w-[45%] hidden md:block" : "w-full "}
-        >
-          <EmailList />
+        <div className={id ? "w-[45%] hidden md:block" : "w-full "}>
+          <EmailList
+            indexOfFirstRecord={indexOfFirstRecord}
+            indexOfLastRecord={indexOfLastRecord}
+          />
+          <Pagination
+            nPages={nPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
 
-        {selectedEmail?.id && (
+        {id && (
           <div className={`w-[100%]`}>
             <EmailBody />
           </div>

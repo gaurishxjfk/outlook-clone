@@ -1,25 +1,39 @@
 import React, { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { useDispatch, useSelector } from "react-redux";
-import { getEmailBodyAsync, setFavEmails } from "../features/emailSlice";
+import {
+  getEmailBodyAsync,
+  setFavEmails,
+  setReadEmails,
+  setSelectedEmail,
+} from "../features/emailSlice";
 import { camelize, getFirstLetter } from "./EmailItem";
 import moment from "moment";
+import { useParams } from "react-router-dom";
 
 const EmailBody = () => {
+  let { id } = useParams();
   const [isFav, setIsFav] = useState(false);
   const dispatch = useDispatch();
   const {
     emailData: {
       emailBody,
       selectedEmail,
+      emailsList,
       readFavObj: { favIds },
     },
   } = useSelector((state) => state);
 
   useEffect(() => {
-    dispatch(getEmailBodyAsync(selectedEmail.id));
-    favIds.includes(selectedEmail.id) ? setIsFav(true) : setIsFav(false);
-  }, [selectedEmail, favIds]);
+    dispatch(getEmailBodyAsync(id));
+    favIds.includes(id) ? setIsFav(true) : setIsFav(false);
+  }, [id, favIds]);
+
+  useEffect(() => {
+    const data = emailsList.find((i) => i.id === id);
+    dispatch(setReadEmails(id));
+    dispatch(setSelectedEmail(data));
+  }, [id, emailsList]);
 
   const loaderPlaceholder = () => (
     <div

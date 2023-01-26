@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { setReadEmails, setSelectedEmail } from "../features/emailSlice";
+import { useNavigate } from "react-router-dom";
 
 export const getFirstLetter = (str) => str.slice(0, 1).toUpperCase();
 export const camelize = (str) => {
@@ -15,6 +16,7 @@ export const camelize = (str) => {
 };
 
 const EmailItem = ({ data }) => {
+  const navigate = useNavigate();
   const [isFav, setIsFav] = useState(false);
   const [isRead, setIsRead] = useState(false);
   const { date, from, id, short_description, subject } = data;
@@ -31,13 +33,14 @@ const EmailItem = ({ data }) => {
   const handleEmailClick = () => {
     dispatch(setSelectedEmail(data));
     dispatch(setReadEmails(id));
+    navigate("/inbox/mail/"+id)
   };
 
   return (
     <div
       className={`${
         isRead ? "bg-[#E9E9E9]" : "bg-white"
-      } flex lg:p-4 md:p-2 lg:max-h-[8em] border border-[#CFCFCF] ml-4 mb-2 mt-0 mr-1 rounded-[9px] cursor-pointer`}
+      } flex py-2 lg:p-4 md:p-2  lg:max-h-[8em] border border-[#CFCFCF] ml-4 mb-2 mt-0 mr-1 rounded-[9px] cursor-pointer`}
       onClick={() => handleEmailClick()}
     >
       <div className="w-12 lg:w-10 md:w-8 flex justify-center hidden md:block">
