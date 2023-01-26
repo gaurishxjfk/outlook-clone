@@ -7,7 +7,6 @@ export const emailSlice = createSlice({
   name: "email",
   initialState: {
     emailsList: [],
-    modifiedEmailList: [],
     emailBody: "",
     selectedEmail: {},
     readFavObj:
