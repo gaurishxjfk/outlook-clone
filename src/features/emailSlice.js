@@ -50,7 +50,7 @@ export const emailSlice = createSlice({
           return state.readFavObj.readIds.includes(email.id);
         } else if (action.payload === "Unread") {
           return !state.readFavObj.readIds.includes(email.id);
-        } else if (action.payload === "Favorites") {
+        } else if (action.payload === "Flagged") {
           return state.readFavObj.favIds.includes(email.id);
         }
         return email;

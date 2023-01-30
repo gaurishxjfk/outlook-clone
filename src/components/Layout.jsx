@@ -4,12 +4,11 @@ import { useParams } from "react-router-dom";
 import { setFilteredEmailsList } from "../features/emailSlice";
 import EmailBody from "./EmailBody";
 import EmailList from "./EmailList";
-import Pagination from "./Pagination";
 
-const recordsPerPage = 4;
+const recordsPerPage = 14;
 const Layout = () => {
   let { id } = useParams();
-
+  //validate email
   const [activeFilter, setActiveFilter] = useState("none");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -72,11 +71,11 @@ const Layout = () => {
             indexOfFirstRecord={indexOfFirstRecord}
             indexOfLastRecord={indexOfLastRecord}
           />
-          <Pagination
+          {/* <Pagination
             nPages={nPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-          />
+          /> */}
         </div>
 
         {id && (
