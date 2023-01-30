@@ -9,6 +9,7 @@ export const emailSlice = createSlice({
     emailsList: [],
     emailBody: "",
     selectedEmail: {},
+    selectAllEmail: false,
     readFavObj:
       localStorage.getItem("readFavObj") !== null
         ? JSON.parse(localStorage.getItem("readFavObj"))
@@ -56,6 +57,9 @@ export const emailSlice = createSlice({
         return email;
       });
     },
+    setAllEmailsSelected: (state, action) => {
+      state.selectAllEmail = !state.selectAllEmail;
+    },
   },
 });
 
@@ -86,5 +90,6 @@ export const {
   setReadEmails,
   setFavEmails,
   setFilteredEmailsList,
+  setAllEmailsSelected,
 } = emailSlice.actions;
 export default emailSlice.reducer;

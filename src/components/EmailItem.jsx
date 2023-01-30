@@ -25,6 +25,7 @@ const EmailItem = ({ data }) => {
   const { date, from, id, short_description, subject } = data;
   const {
     readFavObj: { favIds, readIds },
+    selectAllEmail,
   } = useSelector((state) => state.emailData);
   const dispatch = useDispatch();
 
@@ -32,6 +33,10 @@ const EmailItem = ({ data }) => {
     favIds.includes(id) ? setIsFav(true) : setIsFav(false);
     readIds.includes(id) ? setIsRead(true) : setIsRead(false);
   }, [readIds, favIds]);
+
+  useEffect(() => {
+    selectAllEmail ? setSelected(true) : setSelected(false);
+  }, [selectAllEmail]);
 
   const handleEmailClick = () => {
     dispatch(setSelectedEmail(data));
@@ -48,7 +53,7 @@ const EmailItem = ({ data }) => {
       }`}
       onClick={() => handleEmailClick()}
     >
-      <div className="w-[10%] flex justify-center">
+      <div className="w-[10%] flex justify-end">
         <div
           onClick={() => setSelected(!selected)}
           className={`w-[1em] h-[1em] ml-1 mt-3 rounded-full border border-slate-500 flex justify-center items-center  group-hover:visible hover:text-slate-500 ${
@@ -61,8 +66,8 @@ const EmailItem = ({ data }) => {
         </div>
       </div>
 
-      <div className="w-[85%] ml-3 text-slate-800 ">
-        <p className="text-[16px] leading-6	">{camelize(from.name)}</p>
+      <div className="w-[85%] ml-3 text-slate-800">
+        <p className="text-[16px] leading-1	">{camelize(from.name)}</p>
         <div className="w-[100%] text-[12px] flex justify-between leading-5	">
           <p className="">{subject}</p>
           <p className="line-clamp-1">{moment(date).format("ddd DD/MM")}</p>

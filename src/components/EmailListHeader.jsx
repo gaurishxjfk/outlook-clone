@@ -8,7 +8,10 @@ import {
   MdDone,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { setFilteredEmailsList } from "../features/emailSlice";
+import {
+  setFilteredEmailsList,
+  setAllEmailsSelected,
+} from "../features/emailSlice";
 
 const icons = {
   All: <MdOutlineEmail />,
@@ -22,7 +25,7 @@ const EmailListHeader = () => {
   const [activeFilter, setActiveFilter] = useState("All");
 
   const {
-    emailData: { emailsList },
+    emailData: { emailsList, selectAllEmail },
   } = useSelector((state) => state);
 
   useEffect(() => {
@@ -43,7 +46,16 @@ const EmailListHeader = () => {
   return (
     <div className="text-slate-500 bg-white w-[100%] flex items-center justify-between py-2 text-[20px] border border-b-slate-300">
       <div className="w-[10%] flex justify-end">
-        <IoIosCheckmarkCircleOutline />
+        <span
+          onClick={() => dispatch(setAllEmailsSelected())}
+          className={` rounded-full cursor-pointer ${
+            selectAllEmail
+              ? "bg-[#3468fa] text-white"
+              : "hover:bg-[#3468fa]  hover:text-white"
+          }`}
+        >
+          <IoIosCheckmarkCircleOutline />
+        </span>
       </div>
       <div className="relative transition-all	ease-in-out delay-8500 mr-4">
         <button
