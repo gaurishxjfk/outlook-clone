@@ -6,7 +6,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #EFEFEF;
+  background-color: #fafafa;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -17,6 +17,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.flip-hor{
+  transform: rotateY(180deg);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: .8em;
+}
+ 
+.custom-scrollbar::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(78, 78, 78, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgb(192, 192, 192);
+  border: 3px solid transparent;
+  border-radius: 9px;
+  background-clip: content-box;
+}
 
 .line-clamp-1{
   overflow: hidden;
@@ -31,7 +50,7 @@
   animation-iteration-count: infinite;
   animation-name: placeHolderShimmer;
   animation-timing-function: linear;
-  background-color: #f6f7f8;
+  background-color: #fafafa;
   background: linear-gradient(to right, #fff9f9 8%, #fff0f0 18%, #fff7f7 33%);
   background-size: 800px 104px;
   height: 70px;
@@ -45,4 +64,43 @@
   100% {
     background-position: 800px 0
   }
+}
+
+.resizedStyle{
+  display: flex;
+  flex-direction: row;
+}
+
+.resizedStyle > div:nth-child(4) {
+  display: none;
+}
+.resizedStyle > div:nth-child(5) {
+  display: none;
+}
+.resizedStyle > p:first-child {
+  display: block;
+  min-width: 40%;
+  font-size: 14px;
+}
+
+.resizedStyle > div:nth-child(2) {
+  display: block;
+  min-width: 40%;
+  display: flex;
+  flex-direction: row;
+  gap: 1.5em;
+}
+
+.resizedStyle > div:nth-child(2) > p:first-child {
+  white-space: nowrap;
+}
+
+.resizedStyle > div:nth-child(2) > p:nth-child(2) {
+  color: #777777;
+}
+
+.resizedStyle > div:nth-child(3) {
+  display: block;
+  min-width: 20%;
+  text-align: center;
 }

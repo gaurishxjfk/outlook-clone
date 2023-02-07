@@ -9,6 +9,7 @@ export const emailSlice = createSlice({
     emailsList: [],
     emailBody: "",
     selectedEmail: {},
+    selectAllEmail: false,
     readFavObj:
       localStorage.getItem("readFavObj") !== null
         ? JSON.parse(localStorage.getItem("readFavObj"))
@@ -50,11 +51,14 @@ export const emailSlice = createSlice({
           return state.readFavObj.readIds.includes(email.id);
         } else if (action.payload === "Unread") {
           return !state.readFavObj.readIds.includes(email.id);
-        } else if (action.payload === "Favorites") {
+        } else if (action.payload === "Flagged") {
           return state.readFavObj.favIds.includes(email.id);
         }
         return email;
       });
+    },
+    setAllEmailsSelected: (state, action) => {
+      state.selectAllEmail = !state.selectAllEmail;
     },
   },
 });
@@ -86,5 +90,6 @@ export const {
   setReadEmails,
   setFavEmails,
   setFilteredEmailsList,
+  setAllEmailsSelected,
 } = emailSlice.actions;
 export default emailSlice.reducer;
