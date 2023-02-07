@@ -1,19 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import Pagination from "./Pagination";
 import EmailItem from "./EmailItem";
 import EmailListHeader from "./EmailListHeader";
 
-const EmailList = ({ indexOfFirstRecord, indexOfLastRecord }) => {
-  const { filteredEmailsList } = useSelector((state) => state.emailData);
-  const currentRecords = filteredEmailsList.slice(
-    indexOfFirstRecord,
-    indexOfLastRecord
-  );
+const EmailList = () => {
+  const { filteredEmailsList: currentRecords } = useSelector((state) => state.emailData);
+
 
   const resizableRef = useRef(null);
   const [initialPos, setInitialPos] = useState(null);
   const [initialSize, setInitialSize] = useState(null);
+  const [initialSizes, setInitialSizes] = useState(null);
 
   useEffect(() => {
     if (resizableRef?.current) {
@@ -27,24 +24,26 @@ const EmailList = ({ indexOfFirstRecord, indexOfLastRecord }) => {
   };
 
   const resize = (e) => {
+
     resizableRef.current.style.width = `${
       parseInt(initialSize) + parseInt(e.clientX - initialPos)
     }px`;
+    setInitialSizes(resizableRef.current.offsetWidth)
   };
 
   return (
-    <div className="flex items-center">
+    <div className="hidden md:flex items-center shadow-lg	 ">
       <div
         id="Resizable"
         ref={resizableRef}
-        className="border border-1 border-r-0 border-slate-100 rounded-[5px] max-h-[85vh] relative"
+        className={`border border-1 border-r-0 border-slate-100 rounded-[5px] max-h-[85vh] relative`}
       >
-        <EmailListHeader />
+        <EmailListHeader initialSizes={initialSizes}/>
         <div
           className={`max-h-[70vh] bg-slate-100  ${
             currentRecords &&
             currentRecords.length > 0 &&
-            "overflow-y-scroll custom-scrollbar "
+            "overflow-y-scroll custom-scrollbar rounded-[5px]"
           }`}
         >
           {currentRecords && currentRecords.length > 0 ? (
@@ -52,6 +51,7 @@ const EmailList = ({ indexOfFirstRecord, indexOfLastRecord }) => {
               <EmailItem
                 key={i.id}
                 data={i}
+                initialSizes={initialSizes}
               />
             ))
           ) : (

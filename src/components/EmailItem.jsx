@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
-import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { setReadEmails, setSelectedEmail } from "../features/emailSlice";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +16,7 @@ export const camelize = (str) => {
   return temparr.join(" ");
 };
 
-const EmailItem = ({ data }) => {
+const EmailItem = ({ data, initialSizes }) => {
   const navigate = useNavigate();
   const [isFav, setIsFav] = useState(false);
   const [isRead, setIsRead] = useState(false);
@@ -29,6 +28,8 @@ const EmailItem = ({ data }) => {
   } = useSelector((state) => state.emailData);
   const dispatch = useDispatch();
 
+  const emailInfoRef = useRef(null);
+
   useEffect(() => {
     favIds.includes(id) ? setIsFav(true) : setIsFav(false);
     readIds.includes(id) ? setIsRead(true) : setIsRead(false);
@@ -37,6 +38,14 @@ const EmailItem = ({ data }) => {
   useEffect(() => {
     selectAllEmail ? setSelected(true) : setSelected(false);
   }, [selectAllEmail]);
+
+  useEffect(() => {
+    if (initialSizes > 600) {
+      emailInfoRef.current.classList.add("resizedStyle");
+    } else {
+      emailInfoRef.current.classList.remove("resizedStyle");
+    }
+  }, [initialSizes]);
 
   const handleEmailClick = () => {
     dispatch(setSelectedEmail(data));
@@ -47,13 +56,13 @@ const EmailItem = ({ data }) => {
   return (
     <div
       className={`group ${
-        !isRead && " border-l-4 border-[#004de6]" //border border-[#CFCFCF] border-l-4 border-[#004de6]
+        !isRead && " border-l-4 border-[#004de6]"
       }  flex py-2 mb-[.1em] cursor-pointer w-[100%] ${
         selected ? "bg-[#e6e7fe]" : "bg-white"
       }`}
       onClick={() => handleEmailClick()}
     >
-      <div className="w-[10%] flex justify-end">
+      <div className="w-[12%] flex justify-center">
         <div
           onClick={() => setSelected(!selected)}
           className={`w-[1em] h-[1em] ml-1 mt-3 rounded-full border border-slate-500 flex justify-center items-center  group-hover:visible hover:text-slate-500 ${
@@ -66,8 +75,17 @@ const EmailItem = ({ data }) => {
         </div>
       </div>
 
-      <div className="w-[85%] ml-3 text-slate-800">
+      <div ref={emailInfoRef} className="w-[85%] ml-3 text-slate-800 ">
         <p className="text-[16px] leading-1	">{camelize(from.name)}</p>
+        {/*this is for bigger div*/}
+        <div className="text-[12px] hidden">
+          <p className="">{subject}</p>
+          <p className="line-clamp-1	">{short_description}</p>
+        </div>
+        <div className="mt-1 text-[12px] text-slate-600 leading-3	hidden">
+          <p className="line-clamp-1">{moment(date).format("ddd DD/MM")}</p>
+        </div>
+        {/*this is for smaller div*/}
         <div className="w-[100%] text-[12px] flex justify-between leading-5	">
           <p className="">{subject}</p>
           <p className="line-clamp-1">{moment(date).format("ddd DD/MM")}</p>
@@ -75,6 +93,7 @@ const EmailItem = ({ data }) => {
         <div className="mt-1 text-[12px] text-slate-600 leading-3	">
           <p className="line-clamp-1">{short_description}</p>
         </div>
+
         {/* <div className="flex mt-1 lg:gap-8 md:gap-2 text-[16px]">
            <a className={`text-[#FF0060] cursor-pointer ${!isFav && "hidden"}`}>
             Favorite
