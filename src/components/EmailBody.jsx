@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import parse from "html-react-parser";
 import { useDispatch, useSelector } from "react-redux";
 import { TfiZoomIn, TfiAngleDown } from "react-icons/tfi";
@@ -12,9 +12,11 @@ import {
 import { camelize, getFirstLetter } from "./EmailItem";
 import moment from "moment";
 import { useParams } from "react-router-dom";
+import useComponentVisible from "./Custom-hooks/useComponentVisible";
 
 const EmailBody = () => {
   let { id } = useParams();
+  const zoomBarRef = useRef()
   const [isFav, setIsFav] = useState(false);
   const [toggleZoom, setToggleZoom] = useState(false);
   const [zoomSize, setZoomSize] = useState(100);
@@ -27,6 +29,8 @@ const EmailBody = () => {
       readFavObj: { favIds },
     },
   } = useSelector((state) => state);
+
+  useComponentVisible(zoomBarRef, setToggleZoom)
 
   useEffect(() => {
     dispatch(getEmailBodyAsync(id));
@@ -73,6 +77,7 @@ const EmailBody = () => {
             </span>
           </button>
           <div
+            ref={zoomBarRef}
             className={`${
               !toggleZoom && "hidden"
             } absolute z-50 drop-shadow-lg bg-white border border-[#CFCFCF] h-10 text-slate-500 rounded-lg flex items-center top-9 right-2 px-4 gap-4`}
@@ -101,7 +106,7 @@ const EmailBody = () => {
           </div>
         </div>
       ) : (
-        loaderPlaceholder()
+        <></>
       )}
       <div className="bg-white border border-[#CFCFCF] rounded-[5px] p-5  mt-2 ml-1 shadow-lg	">
         {selectedEmail?.from ? (
