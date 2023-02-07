@@ -3,7 +3,7 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { setReadEmails, setSelectedEmail } from "../features/emailSlice";
 import { useNavigate } from "react-router-dom";
-import { MdDone } from "react-icons/md";
+import { MdDeleteOutline, MdDone } from "react-icons/md";
 
 export const getFirstLetter = (str) => str.slice(0, 1).toUpperCase();
 export const camelize = (str) => {
@@ -57,12 +57,12 @@ const EmailItem = ({ data, initialSizes }) => {
     <div
       className={`group ${
         !isRead && " border-l-4 border-[#004de6]"
-      }  flex py-2 mb-[.1em] cursor-pointer w-[100%] ${
+      }  flex items-center justify-between py-2 mb-[.1em] cursor-pointer w-[100%] ${
         selected ? "bg-[#e6e7fe]" : "bg-white"
       }`}
       onClick={() => handleEmailClick()}
     >
-      <div className="w-[12%] flex justify-center">
+      <div className="w-[8%] flex justify-center">
         <div
           onClick={() => setSelected(!selected)}
           className={`w-[1em] h-[1em] ml-1 mt-3 rounded-full border border-slate-500 flex justify-center items-center  group-hover:visible hover:text-slate-500 ${
@@ -75,7 +75,7 @@ const EmailItem = ({ data, initialSizes }) => {
         </div>
       </div>
 
-      <div ref={emailInfoRef} className="w-[85%] ml-3 text-slate-800 ">
+      <div ref={emailInfoRef} className="w-[84%] ml-3 text-slate-800 ">
         <p className="text-[16px] leading-1	">{camelize(from.name)}</p>
         {/*this is for bigger div*/}
         <div className="text-[12px] hidden">
@@ -101,7 +101,9 @@ const EmailItem = ({ data, initialSizes }) => {
         </div> */}
       </div>
 
-      <div className="w-[5%]">s</div>
+      <div className="w-[8%]  py-2 flex rounded-full items-center justify-center invisible text-slate-600 group-hover:visible hover:bg-slate-100 hover:text-red-400 ">
+        <MdDeleteOutline />
+      </div>
     </div>
   );
 };

@@ -45,7 +45,7 @@ const EmailListHeader = () => {
 
   return (
     <div className="text-slate-500 bg-white w-[100%] flex items-center justify-between py-2 text-[20px] border border-b-slate-300 rounded-[5px]">
-      <div className="w-[12%] flex justify-center">
+      <div className="w-[8%] flex justify-center">
         <span
           onClick={() => dispatch(setAllEmailsSelected())}
           className={`rounded-full cursor-pointer ${

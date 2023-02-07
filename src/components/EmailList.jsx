@@ -4,8 +4,9 @@ import EmailItem from "./EmailItem";
 import EmailListHeader from "./EmailListHeader";
 
 const EmailList = () => {
-  const { filteredEmailsList: currentRecords } = useSelector((state) => state.emailData);
-
+  const { filteredEmailsList: currentRecords } = useSelector(
+    (state) => state.emailData
+  );
 
   const resizableRef = useRef(null);
   const [initialPos, setInitialPos] = useState(null);
@@ -24,21 +25,20 @@ const EmailList = () => {
   };
 
   const resize = (e) => {
-
     resizableRef.current.style.width = `${
       parseInt(initialSize) + parseInt(e.clientX - initialPos)
     }px`;
-    setInitialSizes(resizableRef.current.offsetWidth)
+    setInitialSizes(resizableRef.current.offsetWidth);
   };
 
   return (
-    <div className="hidden md:flex items-center shadow-lg	 ">
+    <div className="hidden md:flex items-center ml-1">
       <div
         id="Resizable"
         ref={resizableRef}
-        className={`border border-1 border-r-0 border-slate-100 rounded-[5px] max-h-[85vh] relative`}
+        className={`border border-1 border-r-0 border-slate-100 rounded-[5px] max-h-[85vh] shadow-lg	 relative`}
       >
-        <EmailListHeader initialSizes={initialSizes}/>
+        <EmailListHeader initialSizes={initialSizes} />
         <div
           className={`max-h-[70vh] bg-slate-100  ${
             currentRecords &&
@@ -48,15 +48,11 @@ const EmailList = () => {
         >
           {currentRecords && currentRecords.length > 0 ? (
             currentRecords.map((i) => (
-              <EmailItem
-                key={i.id}
-                data={i}
-                initialSizes={initialSizes}
-              />
+              <EmailItem key={i.id} data={i} initialSizes={initialSizes} />
             ))
           ) : (
             <div
-              className={`flex py-2 mb-[.1em] cursor-pointer w-[100%] min-w-[10vh] bg-white text-slate-400 px-12`}
+              className={`flex py-2 mb-[.1em] cursor-pointer min-w-[10vh] bg-white text-slate-400 px-12`}
             >
               <span className="text-center mx-auto">
                 nothing to show{" :("}
