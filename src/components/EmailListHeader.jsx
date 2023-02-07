@@ -73,7 +73,7 @@ const EmailListHeader = () => {
         </button>
         {toggle && (
           <div
-            className={`absolute bg-white w-[8em] min-h-[7em] transition-all ease-in-out top-[1.6em] border  rounded-[5px] shadow-lg flex flex-col z-50	`}
+            className={`absolute bg-white w-[8em] min-h-[7em] transition-all ease-in-out top-[1.6em] right-0  border  rounded-[5px] shadow-lg flex flex-col z-50	`}
           >
             {["All", "Unread", "Read", "Flagged"].map((i) => (
               <button

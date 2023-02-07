@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import EmailItem from "./EmailItem";
 import EmailListHeader from "./EmailListHeader";
 
 const EmailList = () => {
+  let { id } = useParams();
   const { filteredEmailsList: currentRecords } = useSelector(
     (state) => state.emailData
   );
@@ -32,7 +34,7 @@ const EmailList = () => {
   };
 
   return (
-    <div className="hidden md:flex items-center ml-1">
+    <div className={`  ml-1 ${id ? "hidden md:flex" : "sm:flex"} items-center`}>
       <div
         id="Resizable"
         ref={resizableRef}

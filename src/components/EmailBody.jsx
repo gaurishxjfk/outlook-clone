@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import parse from "html-react-parser";
 import { useDispatch, useSelector } from "react-redux";
 import { TfiZoomIn, TfiAngleDown } from "react-icons/tfi";
+import { AiOutlineClose } from "react-icons/ai";
 import { BsReplyAll, BsReply, BsThreeDots } from "react-icons/bs";
 import {
   getEmailBodyAsync,
@@ -11,12 +12,12 @@ import {
 } from "../features/emailSlice";
 import { camelize, getFirstLetter } from "./EmailItem";
 import moment from "moment";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useComponentVisible from "./Custom-hooks/useComponentVisible";
 
 const EmailBody = () => {
   let { id } = useParams();
-  const zoomBarRef = useRef()
+  const zoomBarRef = useRef();
   const [isFav, setIsFav] = useState(false);
   const [toggleZoom, setToggleZoom] = useState(false);
   const [zoomSize, setZoomSize] = useState(100);
@@ -29,8 +30,8 @@ const EmailBody = () => {
       readFavObj: { favIds },
     },
   } = useSelector((state) => state);
-
-  useComponentVisible(zoomBarRef, setToggleZoom)
+  const navigate = useNavigate();
+  useComponentVisible(zoomBarRef, setToggleZoom);
 
   useEffect(() => {
     dispatch(getEmailBodyAsync(id));
@@ -63,60 +64,71 @@ const EmailBody = () => {
   return (
     <>
       {selectedEmail?.subject ? (
-        <div className=" border border-[#CFCFCF] bg-white rounded-[5px] px-5 py-2  my-0 md:ml-1 flex justify-between relative shadow-lg	">
-          <p className="text-slate-600 font-semibold">
-            {selectedEmail.subject}
-          </p>
-          <button
-            onClick={() => setToggleZoom(!toggleZoom)}
-            className="text-slate-600 flex items-center gap-1 hover:bg-slate-200 px-2 py-1 rounded"
-          >
-            <TfiZoomIn />
-            <span className="text-[10px] mt-2">
-              <TfiAngleDown />
-            </span>
-          </button>
-          <div
-            ref={zoomBarRef}
-            className={`${
-              !toggleZoom && "hidden"
-            } absolute z-50 drop-shadow-lg bg-white border border-[#CFCFCF] h-10 text-slate-500 rounded-lg flex items-center top-9 right-2 px-4 gap-4`}
-          >
-            <span className="text-[14px]">{zoomSize}%</span>
-            <div>
-              <button
-                onClick={() => zoomSize <= 125 && setZoomSize(zoomSize + 25)}
-                className="px-1 rounded hover:bg-slate-200 w-[1.5em] text-[16px]"
-              >
-                +
-              </button>
-              <button
-                onClick={() => zoomSize >= 75 && setZoomSize(zoomSize - 25)}
-                className="px-1 rounded hover:bg-slate-200 w-[1.5em] text-[16px]"
-              >
-                -
-              </button>
-              <button
-                onClick={() => setZoomSize(100)}
-                className="border border-[#CFCFCF] px-4 rounded text-[14px] font-semibold	ml-1"
-              >
-                Reset
-              </button>
+        <>
+          <div className="border border-[#CFCFCF] bg-white rounded-[5px] px-5 py-2  mb-1 md:ml-1 flex justify-center  shadow-lg md:hidden	">
+            <button
+              className="text-slate-600 text-[12px] bg-slate-200 px-2 rounded gap-1 flex items-center hover:text-slate-800"
+              onClick={() => navigate("/")}
+            >
+              Close <AiOutlineClose />
+            </button>
+          </div>
+          <div className=" border border-[#CFCFCF] bg-white rounded-[5px] px-5 py-2  my-0 md:ml-1 flex justify-between relative shadow-lg	">
+            <p className="text-slate-600 font-semibold">
+              {selectedEmail.subject}
+            </p>
+
+            <button
+              onClick={() => setToggleZoom(!toggleZoom)}
+              className="text-slate-600 flex items-center gap-1 hover:bg-slate-200 px-2 py-1 rounded"
+            >
+              <TfiZoomIn />
+              <span className="text-[10px] mt-2">
+                <TfiAngleDown />
+              </span>
+            </button>
+            <div
+              ref={zoomBarRef}
+              className={`${
+                !toggleZoom && "hidden"
+              } absolute z-50 drop-shadow-lg bg-white border border-[#CFCFCF] h-10 text-slate-500 rounded-lg flex items-center top-9 right-2 px-4 gap-4`}
+            >
+              <span className="text-[14px]">{zoomSize}%</span>
+              <div>
+                <button
+                  onClick={() => zoomSize <= 125 && setZoomSize(zoomSize + 25)}
+                  className="px-1 rounded hover:bg-slate-200 w-[1.5em] text-[16px]"
+                >
+                  +
+                </button>
+                <button
+                  onClick={() => zoomSize >= 75 && setZoomSize(zoomSize - 25)}
+                  className="px-1 rounded hover:bg-slate-200 w-[1.5em] text-[16px]"
+                >
+                  -
+                </button>
+                <button
+                  onClick={() => setZoomSize(100)}
+                  className="border border-[#CFCFCF] px-4 rounded text-[14px] font-semibold	ml-1"
+                >
+                  Reset
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       ) : (
         <></>
       )}
-      <div className="bg-white border border-[#CFCFCF] rounded-[5px] p-5  mt-2 ml-1 shadow-lg	">
+      <div className="bg-white border border-[#CFCFCF] rounded-[5px] p-5  mt-2 md:ml-1 shadow-lg	">
         {selectedEmail?.from ? (
           <div className="flex bg-white">
-            <div className="bg-[#0001ff] rounded-full h-9 w-9 flex items-center justify-center">
-              <span className="text-lg font-bold">
+            <div className="bg-[#0001ff] rounded-full hidden sm:flex sm:h-5 md:h-9  sm:w-5 md:w-9 flex items-center justify-center ">
+              <span className="sm:text-sm md:text-lg font-bold">
                 {getFirstLetter(selectedEmail.from.name)}
               </span>
             </div>
-            <div className="text-[#2468fa] ml-5 flex flex-col ">
+            <div className="text-[#2468fa] md:ml-5 flex flex-col ">
               <span className="text-slate-500 font-semibold line-clamp-1">
                 {camelize(selectedEmail.from.name)}{" "}
                 {" <" + selectedEmail.from.email + ">"}
@@ -126,7 +138,7 @@ const EmailBody = () => {
               </span>
             </div>
             <div className="ml-auto mr-5 flex flex-col items-end ">
-              <div className="text-[#0001ff] flex items-center justify-center gap-3">
+              <div className="text-[#0001ff] flex items-center justify-center md:gap-3">
                 <span className="p-1 hover:bg-[#e6e7fe] text-center rounded cursor-pointer">
                   <BsReply />
                 </span>
@@ -148,7 +160,7 @@ const EmailBody = () => {
         ) : (
           loaderPlaceholder()
         )}
-        <div className="ml-11 p-5 pt-10 ">
+        <div className="md:ml-11 md:p-5 pt-10 ">
           {emailBody ? (
             <div
               className={`text-gray-800 text-[14px] 	`}
